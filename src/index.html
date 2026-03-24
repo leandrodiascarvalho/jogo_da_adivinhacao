@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Instruções do jogo multiplayer de adivinhação de números." />
+  <meta name="theme-color" content="#0d0d1a" />
+
+  <title>🎯 Adivinhe o Número — Instruções</title>
+
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/phaser@3.60.0/dist/phaser.min.js" defer></script>
+  <script src="background.js" defer></script>
+</head>
+
+<body>
+
+  <div id="phaser-container" role="presentation" aria-hidden="true"></div>
+
+  <div id="page-wrapper">
+    <article class="card welcome-card animate__animated animate__fadeInDown" aria-label="Instruções do jogo">
+
+      <!-- Cabeçalho -->
+      <header class="welcome-header">
+        <figure class="welcome-logo" aria-hidden="true">🎯</figure>
+        <h1 class="welcome-title">Adivinhe o Número</h1>
+        <p class="welcome-subtitle">Desafio Multiplayer para 2 Jogadores</p>
+      </header>
+
+      <hr class="divider" aria-hidden="true" />
+
+      <!-- Como funciona -->
+      <section aria-labelledby="how-to-play-title">
+        <h2 id="how-to-play-title" class="section-title">
+          <span aria-hidden="true">📖</span> Como Funciona
+        </h2>
+
+        <ol class="steps-list" aria-label="Passo a passo do jogo">
+
+          <li class="step-item">
+            <span class="step-icon" aria-hidden="true">⚙️</span>
+            <div class="step-content">
+              <strong>Configure a Partida</strong>
+              <p>
+                Insira os nomes dos dois jogadores, escolha o número
+                de rodadas e selecione o nível de dificuldade.
+              </p>
+            </div>
+          </li>
+
+          <li class="step-item">
+            <span class="step-icon" aria-hidden="true">🎲</span>
+            <div class="step-content">
+              <strong>Número Secreto Gerado</strong>
+              <p>
+                A cada turno, um número aleatório é gerado exclusivamente
+                para o jogador ativo. O adversário recebe um número diferente.
+              </p>
+            </div>
+          </li>
+
+          <li class="step-item">
+            <span class="step-icon" aria-hidden="true">💡</span>
+            <div class="step-content">
+              <strong>Dicas a Cada Erro</strong>
+              <p>
+                Após cada tentativa errada, o jogo indica se o número
+                secreto é <strong>maior 📈</strong> ou
+                <strong>menor 📉</strong> que seu palpite.
+              </p>
+            </div>
+          </li>
+
+          <li class="step-item">
+            <span class="step-icon" aria-hidden="true">🏆</span>
+            <div class="step-content">
+              <strong>Pontuação por Eficiência</strong>
+              <p>
+                Quanto menos tentativas usar, mais pontos você ganha.
+                Vence quem acumular mais pontos ao fim de todas as rodadas.
+              </p>
+            </div>
+          </li>
+
+        </ol>
+      </section>
+
+      <hr class="divider" aria-hidden="true" />
+
+      <!-- Dificuldades -->
+      <section aria-labelledby="difficulty-title">
+        <h2 id="difficulty-title" class="section-title">
+          <span aria-hidden="true">🎮</span> Níveis de Dificuldade
+        </h2>
+
+        <table class="difficulty-table" aria-label="Tabela de níveis de dificuldade">
+          <thead>
+            <tr>
+              <th scope="col">Nível</th>
+              <th scope="col">Vidas</th>
+              <th scope="col">Intervalo</th>
+              <th scope="col">Máx. Pontos</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="diff-row-easy">
+              <td>
+                <span aria-hidden="true">😊</span>
+                <strong>Fácil</strong>
+              </td>
+              <td>❤️ 15</td>
+              <td>1 – 50</td>
+              <td>15 pts</td>
+            </tr>
+            <tr class="diff-row-medium">
+              <td>
+                <span aria-hidden="true">😤</span>
+                <strong>Médio</strong>
+              </td>
+              <td>❤️ 10</td>
+              <td>1 – 100</td>
+              <td>10 pts</td>
+            </tr>
+            <tr class="diff-row-hard">
+              <td>
+                <span aria-hidden="true">💀</span>
+                <strong>Difícil</strong>
+              </td>
+              <td>❤️ 5</td>
+              <td>1 – 200</td>
+              <td>5 pts</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <hr class="divider" aria-hidden="true" />
+
+      <!-- Mensagens do jogo -->
+      <section aria-labelledby="hints-title">
+        <h2 id="hints-title" class="section-title">
+          <span aria-hidden="true">🔔</span> Mensagens do Jogo
+        </h2>
+
+        <ul class="tips-list" aria-label="Significado das mensagens">
+          <li class="tip-badge tip-higher">
+            <span aria-hidden="true">📈</span>
+            <span><strong>Muito baixo!</strong> — O número é maior que seu palpite.</span>
+          </li>
+          <li class="tip-badge tip-lower">
+            <span aria-hidden="true">📉</span>
+            <span><strong>Muito alto!</strong> — O número é menor que seu palpite.</span>
+          </li>
+          <li class="tip-badge tip-correct">
+            <span aria-hidden="true">🎉</span>
+            <span><strong>Parabéns!</strong> — Você acertou o número!</span>
+          </li>
+          <li class="tip-badge tip-failed">
+            <span aria-hidden="true">💔</span>
+            <span><strong>Sem tentativas!</strong> — Você perdeu o turno.</span>
+          </li>
+        </ul>
+      </section>
+
+      <hr class="divider" aria-hidden="true" />
+
+      <!-- Fórmula de pontuação -->
+      <section aria-labelledby="formula-title">
+        <h2 id="formula-title" class="section-title">
+          <span aria-hidden="true">📊</span> Fórmula de Pontuação
+        </h2>
+
+        <figure class="formula-box" aria-label="Fórmula de cálculo de pontos">
+          <blockquote class="formula">
+            Pontos = Vidas Máximas − Tentativas Usadas + 1
+          </blockquote>
+          <figcaption class="formula-example">
+            Exemplo: Modo Médio · 10 vidas · Acertou na 3ª tentativa
+            → <strong>10 − 3 + 1 = 8 pontos</strong>
+          </figcaption>
+        </figure>
+      </section>
+
+      <hr class="divider" aria-hidden="true" />
+
+      <!-- Dica de estratégia -->
+      <aside class="strategy-tip" aria-label="Dica de estratégia">
+        <span class="strategy-icon" aria-hidden="true">🧠</span>
+        <div>
+          <strong>Dica de Estratégia:</strong>
+          <p>
+            Use a <em>busca binária</em>: sempre chute o número do meio
+            do intervalo possível. Com essa técnica você encontra qualquer
+            número de 1 a 100 em no máximo <strong>7 tentativas</strong>!
+          </p>
+        </div>
+      </aside>
+
+      <hr class="divider" aria-hidden="true" />
+
+      <!-- Atalhos de teclado -->
+      <section aria-labelledby="keyboard-title">
+        <h2 id="keyboard-title" class="section-title">
+          <span aria-hidden="true">⌨️</span> Atalhos de Teclado
+        </h2>
+
+        <ul class="keyboard-list" aria-label="Atalhos disponíveis no jogo">
+          <li>
+            <kbd>Enter</kbd>
+            <span>Confirmar palpite</span>
+          </li>
+          <li>
+            <kbd>Tab</kbd>
+            <span>Navegar entre campos</span>
+          </li>
+        </ul>
+      </section>
+
+      <!-- Rodapé da página -->
+      <footer class="welcome-footer">
+        <nav aria-label="Ações da página de instruções">
+          <a href="game.html" class="btn btn-primary btn-play-now" role="button" aria-label="Ir para a página do jogo">
+            🚀 Jogar Agora
+          </a>
+        </nav>
+      </footer>
+
+    </article>
+  </div>
+
+</body>
+
+</html>
