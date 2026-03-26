@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Jogo multiplayer de adivinhação de números." />
+  <meta name="theme-color" content="#0d0d1a" />
+  <link rel="stylesheet" href="./css/style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+
+  <title>🎯 Adivinhe o Número — Jogo</title>
+</head>
+<div id="phaser-container" role="presentation" aria-hidden="true"></div>
+<div id="game-ui">
+
+  <!-- ═══════════════════════════════════════════
+      TELA DE CONFIGURAÇÃO
+    ═══════════════════════════════════════════ -->
+  <div id="screen-setup" class="screen active" role="region" aria-label="configuração da partida">
+
+    <article class="card animate__animated animate__fadeInDown">
+      <header class="setup-header">
+        <nav aria-label="Navegação entre páginas">
+          <a href="./index.html" class="btn-back" aria-label="Voltar para as instruções do jogo">Instruções</a>
+        </nav>
+
+        <h1>🎯 Configuração da Partida</h1>
+        <p class="subtitle">Modo Multiplay - 2 jogadores</p>
+      </header>
+      <form id="setup-form" novalidate aria-label="Formulário de configuração">
+        <fieldset class="fieldset-players">
+          <legend>👥Jogadores</legend>
+
+          <div class="input-group">
+            <label for="player1-name">Nome do 1º jogador</label>
+            <input type="text" name="player1-name" required aria-required="true" placeholder="Alice" maxlength="15" autocomplete="off" aria-describedby="player1-hint" />
+            <small id="player1-hint" class="input-hint">Deixe em branco para usar o nome padrão.</small>
+          </div>
+          <div class="input-group">
+            <label for="player2-name">Nome do Jogador 2</label>
+            <input id="player2-name" name="player2-name" type="text" placeholder="Ex: Bob" maxlength="15" autocomplete="off" aria-describedby="player2-hint" />
+            <small id="player2-hint" class="input-hint">
+              Deixe em branco para usar o padrão
+            </small>
+          </div>
+        </fieldset>
+        <fieldset class="fieldset-config">
+          <legend>⚙️ Configurações</legend>
+          <div class="input-group">
+            <label for="rounds-select">Número de rodadas</label>
+            <select id="rounds-select" name="rounds" required aria-describedby="rounds-hint">
+              <option value="1">5 rodadas</option>
+              <option value="2">10 rodadas</option>
+              <option value="3">15 rodadas</option>
+            </select>
+            <small id="rounds-hint" class="input-hint"> Cada rodada tem um turno por jogador.</small>
+          </div>
+        </fieldset>
+        <fieldset class="fieldset-difficulty">
+          <legend>🎮 Dificuldade</legend>
+          <p id="difficulty-desc" class="input-hint">Define o número de vidas e o intervalo do número secreto</p>
+          <div class="difficult-selector" role="radiogroup" aria-label="Selecione a dificuldade">
+            <input type="radio" name="difficulty" id="diff-easy" value="easy" checked aria-describedby="diff-easy-desc" />
+            <label for="diff-easy" class="diff-card diffy-easy">
+              <span class="diff-icon">😊</span>
+              <span class="diff-name">Fácil</span>
+              <span id="diff-easy-desc" class="diff-lives">❤️ 15 vidas | Número entre 1 e 50</span>
+            </label>
+
+            <input type="radio" name="difficulty" id="diff-medium" value="medium" aria-describedby="diff-medium-desc" />
+            <label for="diff-medium" class="diff-card diffy-medium">
+              <span class="diff-icon">😤</span>
+              <span class="diff-name">Médio</span>
+              <span id="diff-medium-desc" class="diff-lives">❤️ 10 vidas | Número entre 50 e 100</span>
+            </label>
+
+            <input type="radio" name="difficulty" id="diff-hard" value="hard" aria-describedby="diff-hard-desc" />
+            <label for="diff-hard" class="diff-card diffy-hard">
+              <span class="diff-icon">💀</span>
+              <span class="diff-name">Difícil</span>
+              <span id="diff-hard-desc" class="diff-lives">❤️ 5 vidas | Número entre 100 e 200</span>
+            </label>
+          </div>
+        </fieldset>
+        <footer class="setup-footer">
+          <button type="button" class=" btn btn-primary" aria-label="Iniciar o jogo com as configurações selecionadas">🚀 Iniciar Jogo</button>
+        </footer>
+      </form>
+    </article>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+      TELA DE JOGO
+    ═══════════════════════════════════════════ -->
+
+  <div id="screen-game" class="screen" role="region" aria-label="tela de jogo">
+
+    <header id="scoreboard" aria-label="Placar da partida"></header>
+    <section class="player-score" id="score-p1" aria-label="Pontuação jogador 1">
+      <span class="player-name" id="score-name-p1">P1</span>
+      <strong class="score-value" id="score-val-p1">0</strong>
+      <span class="score-label">pontos</span>
+    </section>
+
+    <aside class="round-info" aria-label="Informações da rodada">
+      <span id="round-display" aria-live="polite">Rodada 1/3</span>
+      <div class="vs-badge" aria-hidden="true">VS</div>
+      <span id="diff-badge" class="diff-badge-small"></span>
+    </aside>
+
+    <section class="player-score" id="score-p2" aria-label="Pontuação jogador 2">
+      <span class="player-name" id="score-name-p2">P2</span>
+      <strong class="score-value" id="score-val-p2">0</strong>
+      <span class="score-label">pontos</span>
+    </section>
+    </header>
+
+    <main class="game-area" aria-label="Área do jogo">
+      <!-- Link de ajuda → volta para instruções -->
+
+      <a href="./index.html" class="btn-help" aria-label="Ver instruções do jogo" title="Instruções do jogo">❓</a>
+
+      <div id="turn-banner" role="status" aria-live="polite" aria-atomic="true" class="animate_animated">
+        <span id="turn-icon" aria-hidden="true">🎮</span>
+        <span id="turn-text">Vez do jogador 1</span>
+      </div>
+
+      <article class="card game-card" aria-label="Painel de adivinhação">
+
+        <header class="game-card-header">
+          <p class="game-instruction">Adivinhe o número entre <strong>1</strong> e <strong id="max-number-display">50</strong></p>
+        </header>
+
+        <section aria-label="Vidas restantes">
+          <div id="lives-container" role="img" aria-label="Vidas restantes">
+
+            <p id="attempt-text" aria-live="polite" aria-atomic="true"></p>
+        </section>
+        <section aria-label="Enviar palpite">
+          <form id="guess-form" class="guess-area" novalidate>
+            <label for="guess-input" class="sr-only">Digite seu palpite</label>
+            <input type="number" id="guess-input" aria-label="Seu palpite" name="guess" min="1" placeholder="Digite seu palpite" autocomplete="off" aria-required="true" aria-describedby="hint-text" />
+            <button type="button" class="btn btn-guess" aria-label="Enviar Palpite">🎯 Tentar!</button>
+          </form>
+        </section>
+
+        <section id="hint-box" class="hint-box hidden" role="alert" aria-live="assertive" aria-atomic="true">
+          <span id="hint-icon" aria-hidden="true"></span>
+          <span id="hint-text"></span>
+        </section>
+
+        <section id="range-bar-container" class="hidden" aria-label="Intervalo possível">
+          <div id="range-label">
+            <span id="range-min">1</span>
+            <span aria-hidden="true">← Intervalo possível →</span>
+            <span id="range-max">100</span>
+          </div>
+
+          <div class="range-track" role="progressbar" aria-label="Visualização do Intervalo">
+            <div id="range-fill"></div>
+          </div>
+        </section>
+
+        <section id="history-container" class="hidden" aria-label="Histórico de palpites">
+          <h3 class="history-title">📋 Palpites desta rodada:</h3>
+          <ul id="history-list" class="history-list" aria-label="Lista de palpites realizados">
+          </ul>
+        </section>
+  </div>
+  </article>
+  </main>
+</div>
+
+<!-- ═══════════════════════════════════════════
+         TELA DE RESULTADO DA RODADA
+    ═══════════════════════════════════════════ -->
+<div id="screen-round-result" class="screen" role="region" aria-label="Resultado da rodada">
+  <article class="card result-card animate__animated animate__zoomIn">
+
+    <header class="result-header">
+      <figure id="result-icon" class="result-big-icon" aria-hidden="true"></figure>
+      <h2 id="result-title"></h2>
+      <p id="result-desc" aria-live="polite"></p>
+    </header>
+
+    <section id="result-scores" class="result-scores" aria-label="Placar da rodada"></section>
+
+    <footer class="result-footer">
+      <button type="button" class="btn btn-primary" id="btn-next-round" aria-label="Avançar para a próxima rodada">
+        ▶️ Próxima Rodada
+      </button>
+    </footer>
+
+  </article>
+</div>
+
+<!-- ═══════════════════════════════════════════
+         TELA FINAL
+    ═══════════════════════════════════════════ -->
+<div id="screen-final" class="screen" role="region" aria-label="Resultado final da partida">
+  <article class="card final-card animate__animated animate__bounceIn">
+
+    <header class="final-header">
+      <figure id="final-icon" class="result-big-icon" aria-hidden="true"></figure>
+      <h2 id="final-title"></h2>
+      <p id="final-subtitle" aria-live="polite"></p>
+    </header>
+
+    <section id="final-scoreboard" class="final-scoreboard" aria-label="Placar final"></section>
+
+    <footer class="final-footer">
+      <nav aria-label="Opções pós-jogo">
+        <button type="button" class="btn btn-primary" id="btn-play-again" aria-label="Jogar novamente com os mesmos jogadores">
+          🔄 Jogar Novamente
+        </button>
+        <a href="index.html" class="btn btn-secondary" role="button" aria-label="Voltar às instruções">
+          📖 Ver Instruções
+        </a>
+      </nav>
+    </footer>
+
+  </article>
+</div>
+
+</div><!-- /#game-ui -->
+</div>
+
+<body>
+
+</body>
+<script src=" https://cdn.jsdelivr.net/npm/phaser@3.60.0/dist/phaser.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" defer></script>
+<script src="game.js" defer></script>
+
+</html>
