@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="pt-Br">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <title>Play – Jogo de Adivinhação</title>
+</head>
+
+<body>
+  <!--Bloco Splash-->
+  <section class="splash">
+    <h1 class="splash__title">Adivinhações</h1>
+    <p class="splash__subtitle">
+      Descubra o número secreto antes que as tentativas acabem!
+    </p>
+    <div class="splash__actions">
+      <!-- Se a função irComConfete existir no JS, ela será usada, senão usa location.href -->
+      <button class="btn btn--primary" onclick="
+            if (typeof irComConfete === 'function')
+              irComConfete('../index.html');
+            else location.href = '../index.html';
+          ">
+        PLAY
+      </button>
+      <button class="btn btn--ghost" onclick="location.href = 'instrucoes.html'">
+        Voltar para Instruções
+      </button>
+    </div>
+  </section>
+</body>
+<script src="../js/utils.js"></script>
+<script type="module" src="../js/game.js"></script>
+<script type="module" src="../js/play.js"></script>
+
+</html>
